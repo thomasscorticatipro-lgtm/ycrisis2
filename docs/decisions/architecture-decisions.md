@@ -504,3 +504,119 @@ Citations d'autorité émises pendant l'interview **sans avoir lu le passage**, 
 | AD-013 | « temps écoulé = horloge fictive » présenté comme acquis | **Contredit** par 5.2.5, 5.2.6, ch. 6 et le glossaire → **décision d'interview contredisant le PRD**. |
 | `mvp-scope` n°1 | « aucun des 9 blocs ne couvre la traçabilité des actions d'administration » | Exact pour le ch. 4.1, mais **7.10 exige explicitement un journal d'audit** → ce n'est **pas** un élargissement. |
 | `mvp-scope` n°2 | « 4.2.3 annonçait une horloge au choix **sans en préciser le moteur** » | Faux : **5.2.1** précise « minuteur » et **5.2.6** précise que le MEL est cadencé en temps réel → ce n'est **pas** un élargissement. |
+
+---
+
+# Arbitrages des contradictions PRD — 23/07/2026
+
+Les 5 contradictions relevées lors de la confrontation ont été arbitrées avec Thomas, plus
+2 points connexes. **Ces arbitrages priment sur le texte des AD concernées ci-dessus.**
+
+## ARB-1 — Le déclencheur reste l'horloge fictive *(AD-013 et AD-015 maintenues)*
+
+**Décision.** L'horloge fictive est bien un objet persisté sur l'instance, que le facilitateur
+ou le moteur auto fait avancer, et c'est elle qui déclenche les injects « temps écoulé ».
+
+**Conséquence : le PRD est amendé**, non l'AD. Passages à annoter : **5.2.5** (« il n'existe
+pas d'horloge fictive à piloter séparément »), **5.2.6** (« le MEL reste cadencé en temps
+réel », « le temps fictif ne commande jamais l'envoi »), **ch. 6 § objets fondateurs**
+(déclencheur = « le temps réel écoulé »), **glossaire PRD** *Déclencheur* et *Horloge réelle*
+(« Cadence le MEL »).
+
+## ARB-2 — La position d'avancement est portée par l'ÉQUIPE *(AD-005 amendée)*
+
+**Décision.** Retour au PRD ch. 6 : **chaque équipe porte sa propre position d'avancement**.
+En v1 elles avancent toutes au même rythme (le pilotage à rythme commun d'AD-005 est
+conservé), donc **toutes les valeurs sont identiques** ; la divergence v2 s'ouvre alors **sans
+aucune migration**.
+
+**Annule** la conséquence d'AD-005 qui déplaçait l'étape courante sur l'instance.
+
+## ARB-3 — Les catégories de rétention du PRD sont écrites explicitement *(AD-006 amendée)*
+
+**Décision.** On inscrit les catégories de **7.9** et **7.10** :
+
+| Catégorie | Sort |
+|---|---|
+| Contenu réutilisable (scénarios, injects, fiches, briefings, bruit de fond) | **conservé sans limite** |
+| Livrable de débrief | **conservé** (durée à fixer) |
+| Journal d'audit | **conservé plus longtemps** que les données brutes |
+| Compteurs de facturation (agrégats) | **survivent** à la purge |
+| Données brutes d'instance (messages, réponses, sessions, identités éphémères) | **purgées** — délai **plus court** pour les instances test |
+
+**Conservé d'AD-006** : le déclencheur (purger maintenant / à une date choisie), la séquence
+stricte (jamais avant que le débrief soit généré et figé) et les garde-fous.
+**Les durées précises restent ouvertes** (PRD 9.5) : on modélise les catégories sans les figer.
+
+## ARB-4 — Contrôle avant lancement bloquant, mais la file ne se bloque jamais *(AD-007 amendée)*
+
+**Décision, en deux temps.**
+1. **Avant le lancement** : le contrôle de complétude est un **avertissement bloquant**
+   (PRD 5.1.11). Le facilitateur traite chaque destinataire orphelin (ignorer / rediriger) puis
+   **lève explicitement** l'avertissement. Le lancement est empêché jusque-là.
+2. **Pendant l'exercice** *(précision nouvelle de Thomas)* : un inject dont la cible reste non
+   résolue est **mis en attente et signalé** au facilitateur, mais **ne bloque JAMAIS la file** —
+   les injects suivants partent normalement. Le facilitateur décide alors de définir la cible
+   (l'inject part) ou de l'abandonner.
+
+**Annule** la mention « pas de blocage » d'AD-007.
+
+## ARB-5 — Ciblage = intersection de trois dimensions facultatives *(AD-007 amendée)*
+
+**Décision.** La **« place individuelle » est abandonnée** (elle faisait doublon avec le
+croisement équipe × rôle déjà prévu en 5.1.7). La cible est l'**intersection de trois
+dimensions, chacune facultative** :
+
+| Dimension | Absente = |
+|---|---|
+| Périmètre d'équipes | instance entière |
+| Filtre de rôles | tous les membres |
+| Personnes nommées | aucune restriction nominative |
+
+**Le rôle n'est jamais obligatoire** — certains exercices sont des serious games où les
+participants n'en portent pas (conforme à 5.6.1 « rôle **éventuel** » et 5.7.1 « lorsqu'il en
+porte un »). On peut donc cibler `équipe × nom` sans rôle.
+
+**Règle d'or maintenue** : la dimension **personnes nommées** ne peut être renseignée qu'au
+niveau de l'**instance** (préparation en amont ou en direct) — **jamais** dans le scénario
+réutilisable, qui ne compose que équipes × rôles. C'est la condition de la rejouabilité.
+
+Exemples : `Équipe` · `Équipe × rôle` · `Équipe × rôle × nom` · `Équipe × nom` (serious game) ·
+`Rôle seul` (les 300 pilotes) · `rien` (instance entière).
+
+## ARB-6 — Périmètre du journal d'audit élargi *(AD-002 amendée)*
+
+**Décision.** Le journal trace, en plus des actions d'administration déjà listées :
+- **toutes les connexions** ;
+- **tout accès de l'administrateur de la plateforme (l'éditeur) à des données client**.
+
+Les lectures ordinaires ne sont pas instrumentées. Cela donne à « consultation sensible »
+(PRD 7.10) une **définition opérationnelle** et couvre le risque désigné par **8.2.6** (le
+premier point qu'un questionnaire de sécurité bancaire relève).
+
+## ARB-7 — Le bruit de fond porte les 3 portées *(AD-017 amendée)*
+
+**Décision.** Le bruit de fond suit **exactement la même règle de portée que le scénario et la
+fiche personnage** : **plateforme, compte racine ou organisation** (conforme à 5.1 et ch. 6).
+Cela permet à un cabinet de créer du bruit sur-mesure pour un client **sans que ses autres
+clients le voient**.
+
+**Précision de Thomas** : le bruit de fond de **portée plateforme, créé par l'administrateur
+(l'éditeur)**, est **visible de tous les utilisateurs de la plateforme** — c'est le sens même
+de cette portée.
+
+**Annule** la restriction à 2 portées d'AD-017. Le reste d'AD-017 (création ouverte aux
+responsables d'organisation et aux facilitateurs, à la portée dérivée de leur contexte
+d'accès) est **maintenu** et demeure le seul véritable élargissement de périmètre.
+
+---
+
+## Conséquence sur les élargissements de périmètre MVP
+
+La confrontation au PRD complet a montré que **deux des trois élargissements n'en étaient pas** :
+
+| N° | Statut réel |
+|----|-------------|
+| ~~n°1 Audit d'administration~~ | **Exigé par le PRD 7.10** — ce n'est pas un élargissement. Périmètre élargi par ARB-6. |
+| ~~n°2 Horloge automatique~~ | **Exigée par le PRD 4.2.3 et 5.2.1** — ce n'est pas un élargissement. |
+| **n°1 (unique) — Création de bruit de fond par les clients** | **Seul véritable élargissement** : le PRD 5.3.2 réserve la création à l'éditeur en v1. Les 3 portées, elles, sont conformes (5.1, ch. 6). |
