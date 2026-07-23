@@ -708,3 +708,52 @@ libre laisse le participant aller vers l'extérieur sans que la plateforme lui s
 > lancement » (le support informatique, l'astreinte, **l'autorité de tutelle**). Ce marquage
 > disparaît : le typage interne/externe suffit, et l'autorité de tutelle, **externe**, n'est
 > plus joignable d'emblée depuis l'annuaire — le participant la contacte par le champ libre.
+
+## AD-022 — Le type d'un scénario se déduit de sa portée
+
+**Date.** 23/07/2026
+**Pourquoi.** Deux champs indépendants pour une seule décision autorisaient la combinaison
+« sur-mesure + portée plateforme », c'est-à-dire la publication du contenu d'un client à tous
+les autres.
+
+**Décision.** Le champ **`type` est supprimé**. La **portée est la seule décision saisie** ; le
+libellé métier s'en déduit à l'affichage :
+
+| Portée | Libellé affiché |
+|---|---|
+| plateforme | catalogue |
+| compte racine | catalogue |
+| organisation | sur-mesure |
+
+**Conséquence.** La combinaison incohérente devient **littéralement impossible à écrire**. Le
+vocabulaire métier est intégralement conservé à l'écran. Conforme au PRD **5.1.14** : « le type
+de scénario et sa portée sont deux expressions de la même décision, et non deux champs
+indépendants ».
+
+**Précision de vocabulaire.** « Catalogue » signifie au PRD **« écrit sur une organisation
+fictive »**, et non « réutilisable ». Un scénario écrit pour une organisation réelle reste donc
+**sur-mesure**, tout en étant **rejouable autant de fois que voulu** à l'intérieur de sa portée.
+Les deux notions ne s'opposent pas.
+
+## AD-023 — La portée « organisation » descend vers les filiales
+
+**Date.** 23/07/2026
+**Pourquoi.** Une organisation doit pouvoir écrire un exercice une seule fois au niveau du
+groupe et le faire rejouer par chacune de ses filiales, sans le cloner ni maintenir des copies.
+
+**Décision.** Un actif de contenu de **portée organisation** (scénario, fiche personnage, bruit
+de fond) est utilisable par **l'organisation ET par toutes ses filiales**, sur toutes leurs
+missions. La portée suit la **portée imbriquée** du ch. 3 : un niveau couvre les niveaux
+inférieurs.
+
+**Limites inchangées.** Une filiale ne voit jamais le contenu d'une **autre filiale**. Aucune
+autre organisation ne voit ce contenu, y compris au sein du portefeuille d'un même cabinet
+(PRD 5.1.1, 7.7).
+
+> ⚠️ **Comble un silence du PRD** : 5.1.1 disait le contenu de portée organisation « cloisonné
+> à elle » sans préciser le sort des filiales ; 3.2.3 ne traitait que la visibilité des
+> exercices par le responsable, pas la réutilisation du contenu.
+
+**Cas d'usage couvert.** Organisation **autonome** → un catalogue privé se pose en portée
+**compte racine** ; organisation **cliente d'un cabinet** → en portée **organisation**. Dans les
+deux cas, toutes les filiales peuvent rejouer l'exercice.
