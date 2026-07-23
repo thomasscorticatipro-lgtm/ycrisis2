@@ -141,13 +141,42 @@ cible en texte libre → risque de livraison ratée par simple divergence de nom
 attendus, ex. « Cellule Com », « Cellule de crise Paris », « Direction », « Journaliste »).
 Les injects choisissent leurs cibles **uniquement dans cette liste**, jamais en texte libre.
 
-**Trois modes de ciblage (tous requis en v1).**
+**Quatre modes de ciblage (tous requis en v1).**
 - **Toutes les cellules** : diffusion générale (cible spéciale explicite, pas une
   énumération manuelle → une équipe ajoutée plus tard est incluse automatiquement).
 - **Une cellule précise** : inject réservé à une seule équipe (ex. Paris reçoit une info
   que Montpellier n'a pas).
 - **Sélection multiple** : sous-ensemble choisi de cellules (cases à cocher dans le
   référentiel).
+- **Sélection de participants** (un seul ou plusieurs) — voir le détail ci-dessous.
+
+### Mode 4 — Ciblage de participants, à deux niveaux
+
+Ajouté après coup. Le ciblage individuel est possible, mais il vit **à deux niveaux
+distincts** pour ne pas casser la réutilisabilité des scénarios.
+
+**A. Au niveau du SCÉNARIO (réutilisable).** Le référentiel déclare, en plus des équipes et
+des rôles, des **« places individuelles »** (ex. « Directeur de crise », « Porte-parole »).
+Un inject cible **une place, ou plusieurs places**. **Aucun nom propre n'est jamais stocké**
+→ le scénario reste rejouable à l'identique. Conforme au glossaire.
+
+**B. Au niveau de l'INSTANCE (un exercice précis).** Dès que la liste des participants est
+importée — **en préparation en amont** (PRD 4.2.7) ou **en direct** — le facilitateur peut
+cibler **un ou plusieurs participants réels, nommément**. Ces injects appartiennent à
+**l'instance**, pas au scénario réutilisable.
+
+**Expérience utilisateur (identique dans les deux cas).** Une fois l'association faite,
+l'interface présente l'entrée sous la forme **« Michel Galabru — Directeur de crise »**, que
+la cible stockée soit la *place* (contenu de scénario) ou le *participant réel* (contenu
+d'instance). Le facilitateur qui ne connaît pas encore les personnes sélectionne simplement
+**« Directeur de crise »**.
+
+**Garde-fou.** Un scénario réutilisable **ne stocke jamais un participant réel** — sinon il
+cesse d'être rejouable. Le ciblage nominatif vit **au niveau de l'instance**.
+
+**Glossaire à annoter.** La règle « cible toujours exprimée par un nom d'équipe ou de rôle,
+**jamais par un nom propre** » vaut pour le **contenu réutilisable (scénario)**. Au niveau de
+**l'instance**, le ciblage nominatif est **autorisé**.
 
 **Résolution.**
 1. Au lancement : étape d'**association** entre chaque destinataire du référentiel et les
