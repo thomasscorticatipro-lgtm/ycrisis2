@@ -620,3 +620,91 @@ La confrontation au PRD complet a montré que **deux des trois élargissements n
 | ~~n°1 Audit d'administration~~ | **Exigé par le PRD 7.10** — ce n'est pas un élargissement. Périmètre élargi par ARB-6. |
 | ~~n°2 Horloge automatique~~ | **Exigée par le PRD 4.2.3 et 5.2.1** — ce n'est pas un élargissement. |
 | **n°1 (unique) — Création de bruit de fond par les clients** | **Seul véritable élargissement** : le PRD 5.3.2 réserve la création à l'éditeur en v1. Les 3 portées, elles, sont conformes (5.1, ch. 6). |
+
+---
+
+# Angles morts instruits — 23/07/2026
+
+Éléments du PRD complet qu'aucune question de l'interview n'avait couverts.
+
+## AD-018 — Idempotence du pilotage à plusieurs facilitateurs
+
+**Date.** 23/07/2026
+**Pourquoi.** Plusieurs facilitateurs pilotent la même instance ; sans garantie d'unicité, deux
+clics simultanés produiraient un double envoi devant les participants.
+
+**Décision.** Conforme au PRD **5.2.8** : **un inject ne peut être déclenché qu'une seule fois**,
+quel que soit le nombre de facilitateurs qui actionnent le même bouton simultanément.
+
+**Portée.** Le **déclenchement**, la **pause**, la **reprise** et l'**arrêt d'urgence** sont des
+actions **idempotentes à l'échelle de l'instance**. La garantie est imposée **par la base** (et
+non par l'interface), dans le même esprit qu'AD-008.
+
+**Corollaire (PRD 5.2.8).** Chaque facilitateur voit en temps réel l'état du MEL et
+**l'identité de l'auteur de la dernière action de pilotage**.
+
+## AD-019 — Le niveau de permission est saisi à chaque attribution de profil
+
+**Date.** 23/07/2026
+**Pourquoi.** Thomas veut pouvoir accorder des exceptions négociées (un client autorisé à
+écrire sur ses propres contenus), ce qu'une règle purement calculée interdirait.
+
+**Décision.** Le droit (**lecture seule** / **écriture**) est un **champ explicite porté par
+l'attribution de profil**, choisi au moment de l'attribution — et non déduit automatiquement
+de la présence d'un cabinet au-dessus de l'organisation.
+
+**Garde-fou proposé.** Le champ est **pré-rempli selon la règle du PRD 3.2.3** (lecture seule
+si un cabinet sert l'organisation, écriture en modèle autonome), de sorte qu'accorder
+l'écriture à un client soit toujours un **geste délibéré** et non un oubli.
+
+> ⚠️ **Amende le PRD 3.2.3**, qui faisait de la lecture seule côté client une règle
+> (« la modification du contenu restant au cabinet ») et non un paramètre. La protection
+> devient une convention de saisie assistée par un défaut.
+
+**Non modifié.** La **substitution** d'un profil supérieur (PRD 3.3) reste acquise : elle
+descend dans l'arbre et **ne franchit jamais** la frontière cabinet / client. L'accès d'un
+**facilitateur externe** reste attachable à une portée (organisation, mission ou instance)
+**sans appartenance** à l'organisation concernée (PRD 3.3).
+
+## AD-020 — Le réseau social est un fil partagé à l'échelle de l'instance
+
+**Date.** 23/07/2026
+**Pourquoi.** Dupliquer chaque publication dans 1500 boîtes de réception produirait plusieurs
+millions de lignes par exercice, pour un contenu par nature public.
+
+**Décision.** Une publication sur le réseau social simulé est écrite **une seule fois**, dans un
+**fil partagé au niveau de l'instance**, lu par tous les participants toutes équipes confondues
+(PRD 5.4.10). Elle **ne transite pas** par la boîte de réception par destinataire.
+
+**Conséquence.** Le réseau social est le **seul canal** à ne pas suivre le modèle de livraison
+par destinataire (AD/PRD 5.4.15). Son état « lu / non lu » et son rattrapage après déconnexion
+reposent sur un **repère de lecture par participant** sur le fil, et non sur des lignes de
+réception. Le volume reste **constant** quel que soit le nombre de participants.
+
+## AD-021 — Annuaire typé + champ libre de contact sortant
+
+**Date.** 23/07/2026
+**Pourquoi.** Lister un persona externe à l'avance annonce la suite du scénario ; un champ
+libre laisse le participant aller vers l'extérieur sans que la plateforme lui souffle qui existe.
+
+**Décision, en trois parties.**
+
+1. **Annuaire préparé au niveau du scénario.** Les personas mobilisés y sont listés en amont,
+   chacun **typé** : partie prenante **interne** ou **externe**. Figé au lancement (AD-003).
+2. **Vue du participant, calculée à l'affichage** (aucune liste stockée par participant) :
+   - personas **internes** → visibles **dès le démarrage** ;
+   - personas **externes** → visibles **seulement après qu'ils lui ont écrit** (information déjà
+     portée par ses réceptions).
+   **Aucun persona externe n'est jamais listé d'avance**, sans exception.
+3. **Champ libre de contact sortant.** Le participant dispose d'un **champ de saisie libre** où
+   il inscrit **qui il veut contacter** (« la préfecture », « notre assureur »). Le message part
+   dans la **boîte de réception du facilitateur** (PRD 5.2.11), qui décide s'il répond et avec
+   quel persona.
+
+**Conséquence de modélisation.** Un message sortant de participant doit pouvoir porter une
+**destination en texte libre**, et pas seulement un lien vers un persona existant.
+
+> ⚠️ **Amende le PRD 5.4.12**, qui prévoyait de marquer certains personas « joignables dès le
+> lancement » (le support informatique, l'astreinte, **l'autorité de tutelle**). Ce marquage
+> disparaît : le typage interne/externe suffit, et l'autorité de tutelle, **externe**, n'est
+> plus joignable d'emblée depuis l'annuaire — le participant la contacte par le champ libre.
