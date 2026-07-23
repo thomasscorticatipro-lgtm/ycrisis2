@@ -461,3 +461,46 @@ Thomas le **21/07/2026**. Détail et justification : **`docs/mvp-scope.md`**.
 | **n°1** | Audit d'administration (`admin_audit_log`) entre au MVP | AD-002 |
 | **n°2** | Horloge automatique minimale dès la v1 | AD-015 |
 | **n°3** | Bruit de fond à portée compte racine + création par les facilitateurs | AD-017 |
+
+---
+
+# Confrontation au PRD v0.3 complet — 23/07/2026
+
+Le PRD complet (ch. 1 à 10) n'avait **pas** été déposé au dépôt au moment de l'interview
+d'architecture : celle-ci s'est tenue sur les seuls ch. 4 et 10, plus les commentaires de la
+migration `0001`. Chaque AD est ici confrontée au document intégral.
+
+**Légende.** ✅ confirme · ❌ contredit · ⚪ muet (le PRD ne traite pas le sujet ; le ch. 6 est
+« volontairement non technique », donc muet par construction sur les choix d'implémentation).
+
+| AD | Verdict | Référence exacte |
+|----|---------|------------------|
+| **AD-001** Étiquette de cloisonnement | ✅ principe / ⚪ technique | 7.6 (frontière = compte racine), 7.8 (imposée côté serveur, « le front reflète la règle, il ne la porte pas »), ch. 6 § *La hiérarchie des comptes*. Le choix colonne-vs-jointure est muet. |
+| **AD-001b** `compte_racine_id` | ✅ | 7.6, ch. 6 § « Le cabinet et l'organisation autonome constituent donc les deux formes possibles du compte racine », glossaire *Compte racine*. |
+| **AD-002** `events` + `admin_audit_log` | ✅ **exigé, pas un élargissement** / ❌ périmètre trop étroit | **7.10** : « Un journal d'audit doit être tenu […] chaque connexion, chaque **consultation sensible**, chaque modification ». Aussi 5.8.9, 8.2.6. AD-002 **omet connexions et consultations sensibles**. |
+| **AD-003** Snapshot hybride | ✅ principe / ⚪ forme | 5.1.16, ch. 6 § *Le figement de l'instance*, 5.5.6. La forme (lignes + JSON) est muette. |
+| **AD-004** Étapes explicites | ✅ **littéralement** | 4.2.1 et ch. 6 § *La distinction scénario contre instance* : « modélisé comme un graphe dès la version 1, même si chaque **étape ne pointe encore que vers une seule étape suivante** ». |
+| **AD-005** Rythme commun | ❌ **CONTREDIT** | ch. 6 § *L'état d'avancement par équipe* : « **Chaque équipe possède son propre état d'avancement dans le scénario, indépendant d'une simple horloge globale partagée.** C'est cette donnée qui permettra plus tard à deux équipes de suivre des chemins différents ». Aussi 4.3 *fil conducteur*. |
+| **AD-006** Règle de purge unique | ❌ **CONTREDIT** | **7.9 « Trois régimes de rétention »** (contenu réutilisable sans limite / livrable conservé / données brutes purgées, « les instances test bénéficient d'un délai plus court »), **7.10** (journal d'audit : régime propre **plus long**), 5.1.17, 8.1.5 (compteurs de facturation non purgés), 9.5. |
+| **AD-007** Référentiel + 4 modes | ✅ partiel / ❌ partiel / ⚪ partiel | ✅ ciblage abstrait : 5.1.8, ch. 6 § *La cible de diffusion*. ⚪ le « référentiel déclaré » n'existe pas au PRD. ❌ 5.1.7 obtient la personne unique par **équipe × rôle** (pas de « place ») ; **5.1.11** impose un « avertissement **bloquant** […] que le facilitateur peut lever », là où AD-007 écrit « pas de blocage ». |
+| **AD-008** Contrainte de portée en base | ⚪ (esprit ✅) | Muet (non technique) ; esprit soutenu par 7.8. |
+| **AD-009** Canaux en liste fermée | ✅ | 5.4.2 (socle), 5.4.3 (optionnels), 5.4.4 « Ajouter un canal par type de crise est explicitement proscrit », glossaire *Canal*. |
+| **AD-010** Email purgé | ✅ | 5.6.1, 5.6.4-5, 7.9.3, **8.2.4** (minimisation RGPD : « rien d'autre que le nom, l'email professionnel, l'équipe et le rôle »). |
+| **AD-011** Auteur qualifié | ✅ principe / ⚪ forme | ch. 6 § *Deux populations, deux modèles d'identité* : « **deux tables**, deux mécanismes d'authentification et deux cycles de vie distincts ». Aussi 5.7.1, 5.2.8, 7.10. |
+| **AD-012** Validation pour jouer | ✅ pour le bruit de fond / ⚪ pour le scénario | **5.3.6** : statut brouillon/validé et « ne pouvoir être utilisé dans un **exercice réel** qu'une fois validé » — mais ce texte ne vise **que le bruit de fond**. Rien d'équivalent pour le scénario. L'invalidation à la modification est muette. |
+| **AD-013** Déclencheur = horloge fictive | ❌ **CONTREDIT FRONTALEMENT** | **5.2.6** : « **Le MEL reste cadencé en temps réel** […] **Le temps fictif ne commande jamais l'envoi** ». **5.2.5** : « **il n'existe donc pas d'horloge fictive à piloter séparément** ». ch. 6 § *objets fondateurs* : déclencheur = « le **temps réel écoulé** ». Glossaire : « Horloge réelle […] **Cadence le MEL** ». |
+| **AD-014** Temps fictif normalisé | ⚪ forme / ✅ besoin | Muet sur la forme. Besoin confirmé par 5.4.18 (« la **date fictive courante de l'instance** »), 5.7.1 (horodatage des deux temps), 5.2.4. |
+| **AD-015** Manuel + auto minimal | ✅ **les 2 modes sont exigés en v1** / ❌ le moteur | ✅ 4.2.3 et **5.2.1** (« automatiquement selon un **minuteur** »), 5.2.2 → **ce n'est donc pas un élargissement**. ❌ le moteur d'AD-015 avance l'*horloge fictive*, or 5.2.6 et ch. 6 disent que le minuteur cadence le **MEL en temps réel**. |
+| **AD-016** Snapshot unique immuable | ✅ | 5.1.16 (« **une** version immuable »), glossaire *Version figée* (« **La** copie immuable »), ch. 6 § figement. |
+| **AD-017** Bruit de fond ouvert | ❌ **CONTREDIT (assumé)** | **5.3.2** : « En version 1, **seul l'administrateur de la plateforme publie du bruit de fond** ; aucun compte client ne produit ses propres templates ». 5.3.3 (la réponse du PRD : passer par un inject ordinaire), 4.2.6, 4.3.3, 9.11. ⚠️ De plus 5.1 et ch. 6 donnent au template **les 3 portées**, là où AD-017 n'en retient que 2. |
+
+## Correction des citations non vérifiées
+
+Citations d'autorité émises pendant l'interview **sans avoir lu le passage**, rectifiées :
+
+| Où | Ce qui était affirmé | Réalité vérifiée |
+|----|----------------------|------------------|
+| AD-005 | « horloge unique du PRD » | Le PRD décrit **deux** horloges (5.2.3) et un avancement **par équipe** (ch. 6). L'« horloge unique » n'existe nulle part au PRD → **décision d'interview sans appui PRD**. |
+| AD-013 | « temps écoulé = horloge fictive » présenté comme acquis | **Contredit** par 5.2.5, 5.2.6, ch. 6 et le glossaire → **décision d'interview contredisant le PRD**. |
+| `mvp-scope` n°1 | « aucun des 9 blocs ne couvre la traçabilité des actions d'administration » | Exact pour le ch. 4.1, mais **7.10 exige explicitement un journal d'audit** → ce n'est **pas** un élargissement. |
+| `mvp-scope` n°2 | « 4.2.3 annonçait une horloge au choix **sans en préciser le moteur** » | Faux : **5.2.1** précise « minuteur » et **5.2.6** précise que le MEL est cadencé en temps réel → ce n'est **pas** un élargissement. |

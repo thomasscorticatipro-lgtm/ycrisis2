@@ -21,7 +21,7 @@ explicitement** en connaissance de cause.
 
 | | |
 |---|---|
-| **Ce que prévoyait le PRD** | Le ch. 4.1 liste 9 blocs fonctionnels ; aucun ne couvre la traçabilité des actions d'administration. La table `events` était pensée pour le seul débrief. |
+| **Ce que prévoyait le PRD** | ⚠️ **Citation rectifiée le 23/07** (le PRD complet n'avait pas été lu). Le ch. 4.1 ne mentionne effectivement pas l'audit d'administration, **mais le ch. 7.10 l'EXIGE explicitement** : « Un journal d'audit doit être tenu […] chaque connexion, chaque consultation sensible, chaque modification est un événement horodaté et attribué », avec « un régime de rétention propre, **plus long** que celui des données brutes d'instance ». Voir aussi 5.8.9 et 8.2.6. |
 | **Ce qui entre au MVP** | Un **journal d'audit d'administration séparé et append-only**, distinct de `events`. Trace : comptes (création/modification/désactivation), invitations, changements de droits, organisations/filiales/missions/scénarios, lancement/arrêt d'instances, validation de scénario, purges, bruit de fond. |
 | **Pourquoi** | La traçabilité des actions d'administration est très coûteuse à rétro-installer, et nécessaire à l'audit sécurité/RGPD dès les premiers clients. |
 | **Impact** | Une table supplémentaire, ses policies RLS et son trigger d'étiquetage. Aucun impact sur le déroulé d'un exercice. |
@@ -32,7 +32,7 @@ explicitement** en connaissance de cause.
 
 | | |
 |---|---|
-| **Ce que prévoyait le PRD** | 4.2.3 annonçait une horloge « au choix (auto/manuelle) » sans en préciser le moteur ; l'arbitrage d'architecture avait d'abord conclu au **tout-manuel** en v1. |
+| **Ce que prévoyait le PRD** | ⚠️ **Citation rectifiée le 23/07** (le PRD complet n'avait pas été lu). 4.2.3 **et 5.2.1** exigent déjà les deux modes en v1, et **précisent le moteur** : « si l'horloge du scénario avance automatiquement selon un **minuteur** ». 5.2.6 ajoute que « le MEL reste **cadencé en temps réel** ». Le PRD ne conclut donc nulle part au tout-manuel. |
 | **Ce qui entre au MVP** | Le mode **manuel reste le défaut**. S'y ajoute un **moteur automatique volontairement minimal** : il avance l'horloge **fictive** au fil du temps réel selon un **rapport fixé au lancement** (ex. 1h fictive = 15 min réelles), activable/désactivable d'un clic par instance, sans perte d'état. |
 | **Pourquoi** | Le confort du mode automatique sans réintroduire le temps réel comme déclencheur : le moteur remplace la main du facilitateur, il ne change pas la définition de « temps écoulé » (toujours fictif). |
 | **Impact** | Réglage de cadence sur l'instance + traçage des bascules. **Vitesse variable et scénarios full-auto restent post-v1.** |
