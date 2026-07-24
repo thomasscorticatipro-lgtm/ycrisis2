@@ -7,7 +7,7 @@ Plateforme de simulation d'exercices de crise (inspirée de Conducttr). Base d'e
 - **instance** = une session d'exercice de crise, JAMAIS un serveur/conteneur/déploiement
 - **scénario** = le plan réutilisable ; **instance** = son exécution réelle
 - **fiche personnage** = permanente ; **briefing** = spécifique à un scénario
-- **portée de réutilisation** = plateforme | compte racine | organisation (le clonage ne descend que vers le bas)
+- **portée de réutilisation** = plateforme | compte racine | organisation | filiale (le clonage ne descend que vers le bas) [AD-028]
 - **compte racine** = cabinet **OU** organisation autonome ; seule frontière d'isolation, matérialisée par l'étiquette `compte_racine_id` sur **chaque ligne**. Ne jamais écrire « cabinet » pour dire « compte racine » (en autonome, pas de cabinet). [AD-001/001b]
 - **snapshot** = la **version figée** prise au lancement : **une seule par instance**, immuable, de forme **hybride** (injects figés en lignes + archive JSON pour le reste). [AD-003/016]
 - **étape** = **nœud du graphe** du scénario, relié au suivant ; les injects s'y rattachent. Un seul lien sortant en v1. L'**étape courante appartient à l'instance**, jamais à l'équipe. [AD-004/005]

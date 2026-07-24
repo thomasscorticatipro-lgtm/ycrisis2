@@ -13,7 +13,7 @@ ci-dessous, ne doit **pas** être développé en v1 — même si cela paraît ut
 
 ---
 
-## Le seul véritable élargissement
+## Les élargissements assumés
 
 ### Création de bruit de fond par les clients
 
@@ -26,6 +26,17 @@ ci-dessous, ne doit **pas** être développé en v1 — même si cela paraît ut
 | **Pourquoi** | Les clients ont besoin d'un bruit de fond crédible à leur contexte dès la v1 ; le cloisonnement standard le permet sans risque de fuite. |
 | **Ce qui n'est PAS un élargissement** | Les **trois portées** du bruit de fond (plateforme, compte racine, organisation) sont **conformes** au PRD 5.1 et ch. 6, qui rangent le template de bruit de fond parmi les trois actifs portant la portée à trois valeurs. Le bruit de portée plateforme publié par l'éditeur reste **visible de tous**. |
 | **Impact** | Portée + étiquette de cloisonnement sur le bruit de fond, contrainte en base interdisant de créer hors de sa propre portée, traçage des créations/modifications. |
+
+### Portée de réutilisation « filiale » (4ᵉ niveau)
+
+**Décision Thomas 23/07** · AD-028
+
+| | |
+|---|---|
+| **Ce que prévoit le PRD** | 5.1.1 définit **trois** portées : plateforme, compte racine, organisation. Le PRD 3.3 rattache le contenu sur-mesure à la **mission** (droits/propriété), mais n'ouvre pas de portée de réutilisation plus fine que l'organisation. |
+| **Ce qui entre au MVP** | Une **quatrième portée « filiale »** : un contenu peut être privé à une filiale et à ses missions, **invisible des filiales sœurs**, tout en restant visible du responsable d'organisation au-dessus. |
+| **Pourquoi** | Une organisation à plusieurs filiales veut du contenu réutilisable au sein d'une filiale sans le partager avec les autres. |
+| **Impact** | Une valeur d'énumération de plus, une cible `filiale_id` sur les actifs de contenu, et l'héritage correspondant dans les policies RLS. Le clonage vers le bas s'étend naturellement. |
 
 ---
 

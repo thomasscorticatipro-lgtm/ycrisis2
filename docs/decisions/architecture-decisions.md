@@ -851,3 +851,25 @@ annoncé**, piloté naturellement **à la main** ; le moteur automatique à cade
 cinétiques **continues intra-journée**. Les deux outils coexistent sans se gêner.
 
 Conforme au PRD 5.2.4-5 ; confirme ARB-1 ; raffine AD-014. **Pas un élargissement de périmètre.**
+
+## AD-028 — Portée de réutilisation : ajout du niveau « filiale » (4 niveaux)
+
+**Date.** 23/07/2026
+**Pourquoi.** Une filiale a besoin de réutiliser un contenu sur ses propres sites/missions
+tout en le gardant privé des filiales sœurs — impossible avec les trois portées.
+
+**Décision.** La portée de réutilisation passe de **3 à 4 valeurs** :
+`plateforme · compte racine · organisation · filiale`.
+- **Portée filiale** = contenu visible et réutilisable par **la filiale et ses missions /
+  instances**, **invisible des filiales sœurs**. Le responsable d'organisation au-dessus le
+  voit (portée imbriquée, PRD 3.2.3) ; les filiales sœurs non.
+- **Étiquette** : `compte_racine_id` (AD-001) + cible `filiale_id` (contrainte « une seule
+  cible », AD-008, à étendre au niveau filiale).
+- **Clonage** : descend toujours vers le bas (plateforme → compte racine → organisation →
+  filiale) ; l'inverse reste impossible (PRD 5.1.2).
+- S'applique aux **trois actifs** de contenu (scénario, fiche personnage, bruit de fond).
+
+> ⚠️ **Amende le PRD 5.1.1** (3 → 4 portées). **Élargissement de périmètre MVP assumé.** Le
+> niveau « mission » (5ᵉ) a été écarté pour l'instant. Le PRD 3.3 (« le contenu appartient à la
+> mission ») concerne les **droits/propriété** du contenu, distincts de la **portée de
+> réutilisation** traitée ici.
