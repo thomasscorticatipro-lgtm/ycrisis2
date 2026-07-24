@@ -971,3 +971,22 @@ canaux** ni alourdir l'interface du participant.
 variable » (ch. 1) et l'interdiction de multiplier les canaux par contexte (5.4.4).
 
 **Pas un élargissement** : la liste fermée des canaux (AD-009) est inchangée.
+
+## AD-033 — Stratégie IA v1 : Mistral seul, bascule manuelle (pas de modèle alternatif)
+
+**Date.** 23/07/2026
+**Pourquoi.** Rester simple et souverain en v1 : un seul fournisseur européen, et le
+facilitateur comme filet de secours plutôt qu'un second modèle.
+
+**Décision.**
+- **Un seul fournisseur en v1 : Mistral.** Aucun modèle IA alternatif, **aucun routeur**
+  (pas d'OpenRouter) — cohérent avec la souveraineté (PRD 7.2, 7.5).
+- **Bascule de secours (PRD 7.12)** = si l'appel Mistral échoue, le **facilitateur reçoit une
+  alerte** sur son écran de pilotage et **reprend la main manuellement** sur la conversation
+  (via sa boîte de réception, PRD 5.2.11). **Pas de second modèle** en v1.
+- L'abstraction [src/lib/ai/provider.ts](src/lib/ai/provider.ts) reste en place pour brancher
+  un fallback **souverain** plus tard (post-v1), sans réécriture.
+
+**Conforme** au PRD 7.12 (l'indisponibilité du modèle n'interrompt jamais l'exercice) et 7.5.
+**Pas un élargissement.** Résout le volet « bascule de secours » de l'angle mort role-player IA
+(le reste — objet conversation, état de délégation, reprise en main — reste à modéliser).
