@@ -990,3 +990,32 @@ facilitateur comme filet de secours plutôt qu'un second modèle.
 **Conforme** au PRD 7.12 (l'indisponibilité du modèle n'interrompt jamais l'exercice) et 7.5.
 **Pas un élargissement.** Résout le volet « bascule de secours » de l'angle mort role-player IA
 (le reste — objet conversation, état de délégation, reprise en main — reste à modéliser).
+
+## AD-034 — Arrêt d'urgence : gros bouton, confirmation légère + message éditable
+
+**Date.** 23/07/2026
+**Pourquoi.** Pouvoir stopper instantanément un exercice en cas d'urgence réelle, sans qu'un
+clic accidentel arrête un exercice à 300 cellules.
+
+**Décision.**
+- **Déclenchement** : un **gros bouton** côté pilotage, atteignable en un geste depuis
+  n'importe quel écran. Actionnable par le **facilitateur de l'instance ET tout profil
+  supérieur habilité** de son arbre (substitution, PRD 3.3/5.9.6). **Jamais un participant.**
+- **Après l'appui** : une **confirmation légère** — fenêtre « Confirmer l'arrêt d'urgence ? »
+  avec un **champ message pré-rempli et éditable** — puis validation.
+- **Effets immédiats** (fermes, PRD 5.9.8) : **gèle le MEL**, **coupe les conversations IA** en
+  cours, **bloque tout nouvel envoi** quelle qu'en soit l'origine, et affiche à **tous les
+  participants** une **popup non refermable** portant **le message rédigé par l'auteur**. Cette
+  popup est le **seul** contenu **sans** la mention « EXERCICE » (elle sort de la fiction).
+- **Reprise** : **explicite et tracée**, jamais automatique, distincte de la reprise après une
+  pause tactique (PRD 5.2.2).
+- **Événement de premier ordre** : l'arrêt, son **auteur**, son **horodatage**, son **message**
+  et la **position du MEL au gel** sont journalisés et **figurent dans le livrable de débrief**
+  (PRD 5.9.10). Action **idempotente** à l'échelle de l'instance (AD-018).
+
+> ⚠️ **Amende le PRD 5.9.7** : la confirmation forte (ressaisie du **mot de passe**) est
+> remplacée par une **confirmation légère** (fenêtre de confirmation + message éditable). Le
+> garde-fou anti-accident est conservé ; l'exigence de mot de passe est levée pour la rapidité
+> en situation de stress. Le message personnalisé (5.9.8) est **conservé**.
+
+Résout l'angle mort « arrêt d'urgence » (5.9). **Pas un élargissement.**
