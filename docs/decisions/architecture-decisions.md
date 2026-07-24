@@ -873,3 +873,27 @@ tout en le gardant privé des filiales sœurs — impossible avec les trois port
 > niveau « mission » (5ᵉ) a été écarté pour l'instant. Le PRD 3.3 (« le contenu appartient à la
 > mission ») concerne les **droits/propriété** du contenu, distincts de la **portée de
 > réutilisation** traitée ici.
+
+## AD-029 — Adapter un exercice = cloner le scénario, jamais retoucher au niveau de l'instance
+
+**Date.** 23/07/2026
+**Pourquoi.** Garder une **source de contenu unique** par scénario et un historique clair,
+plutôt que d'éclater le contenu entre le scénario et l'instance.
+
+**Décision.**
+- Modifier le **contenu** d'un inject (texte, ajout d'injects) se fait **toujours dans un
+  scénario**, jamais au niveau de l'instance. Pour adapter sans altérer l'original, on
+  **clone** le scénario en une **variante indépendante** (PRD 5.1.2-3), qu'on édite librement
+  (le « crayon » sur l'inject), puis on lance l'instance depuis la variante.
+- Le clone est une **copie complète et indépendante** : modifier l'original n'affecte pas les
+  clones, et réciproquement (PRD 5.1.3).
+- **Distinction maintenue** : changer **qui** reçoit un inject (équipes / rôles / personnes)
+  reste au niveau de l'**instance** (AD-024/AD-026), sans cloner. Seul le **contenu** passe par
+  le clone.
+- L'instance **ne contient aucune édition de contenu propre** : elle référence un scénario
+  (original ou variante) et en fige le snapshot au lancement (AD-003/AD-016).
+
+**Conséquence.** La retouche demande un clic « dupliquer » avant d'adapter. Un clone neuf part
+en statut **brouillon** (AD-012) et devra être validé avant un exercice réel.
+
+Conforme PRD 5.1.2-3 et 5.1.15. **Pas un élargissement.**
