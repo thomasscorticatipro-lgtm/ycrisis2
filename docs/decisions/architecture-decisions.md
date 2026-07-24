@@ -951,3 +951,23 @@ ciblage par texte libre.
 
 Relève de l'élargissement d'AD-030 (pas un élargissement distinct). Principalement une spec
 d'interface ; confirme que `equipe.nom` est un libellé libre au niveau instance.
+
+## AD-032 — Le canal « Actualité » est un média générique (presse, télé, radio)
+
+**Date.** 23/07/2026
+**Pourquoi.** Offrir une mise en scène riche (JT, flash radio, article) **sans multiplier les
+canaux** ni alourdir l'interface du participant.
+
+**Décision.**
+- **Aucun canal TV dédié.** Le contenu audiovisuel et radio passe par le canal **« site
+  d'actualité »** (affichable sous le libellé « Actualité / Médias »).
+- Un inject sur ce canal peut être de **plusieurs formats** : article de **presse écrite**,
+  reportage **télé** (vidéo), bulletin **radio** (audio)… Le canal **ne se démultiplie pas** ;
+  c'est le **format du contenu** qui varie.
+- Reste **en lecture seule** (canal d'autorité extérieure, PRD 5.4.9).
+
+**Conséquence schéma (ÉTAPE 2).** Un inject destiné à ce canal porte un **format de média**
+(texte / vidéo / audio) qui commande son rendu. Cohérent avec « moteur générique, contenu
+variable » (ch. 1) et l'interdiction de multiplier les canaux par contexte (5.4.4).
+
+**Pas un élargissement** : la liste fermée des canaux (AD-009) est inchangée.
