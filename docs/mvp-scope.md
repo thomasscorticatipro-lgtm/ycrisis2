@@ -38,6 +38,17 @@ ci-dessous, ne doit **pas** être développé en v1 — même si cela paraît ut
 | **Pourquoi** | Une organisation à plusieurs filiales veut du contenu réutilisable au sein d'une filiale sans le partager avec les autres. |
 | **Impact** | Une valeur d'énumération de plus, une cible `filiale_id` sur les actifs de contenu, et l'héritage correspondant dans les policies RLS. Le clonage vers le bas s'étend naturellement. |
 
+### Messages entre participants (peer-to-peer)
+
+**Décision Thomas 23/07** · AD-030, AD-031
+
+| | |
+|---|---|
+| **Ce que prévoit le PRD** | 5.4.11 : le participant « écrit à un **persona** ». Le chat d'équipe couvre l'intra-équipe, le réseau social le public. Aucun mail/messagerie privé **participant → participant / équipe**. |
+| **Ce qui entre au MVP** | Un participant peut adresser un **mail simulé / message pro** à un persona, à **un autre participant**, ou à **une équipe** (annuaire complet de l'instance). Le mail reste une **boîte simulée**, sans aucun envoi réel (AD-010). |
+| **Pourquoi** | En vraie crise, les cellules s'écrivent directement. |
+| **Impact** | La boîte de réception doit porter un **expéditeur persona OU participant** ; carnet d'adressage à deux volets (personas AD-021 + participants/cellules) ; cellules nommées librement. |
+
 ---
 
 ## Reclassés — exigés par le PRD, donc pas des élargissements

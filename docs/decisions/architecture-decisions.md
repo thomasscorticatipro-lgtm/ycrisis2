@@ -926,3 +926,28 @@ côté participants, de l'auteur qualifié d'AD-011.
 
 > ⚠️ **Élargissement de périmètre MVP assumé.** Le PRD 5.4.11 cadrait l'écriture du participant
 > sur les **personas** ; le flux **participant → participant / équipe** va au-delà.
+
+## AD-031 — Carnet d'adressage du participant : annuaire complet de l'instance + cellules nommées
+
+**Date.** 23/07/2026
+**Pourquoi.** En crise on peut avoir besoin d'écrire à n'importe quelle cellule ; des cellules
+nommées librement et l'affichage de l'appartenance rendent un grand annuaire navigable.
+
+**Décision.**
+- Un participant peut adresser un message à **n'importe quel participant ou équipe de
+  l'instance** (annuaire complet).
+- Les **cellules portent un nom libre**, choisi à la préparation de l'instance (ex. « Cellule
+  Décisionnelle », « Cellule opérationnelle », « Cellule ville de Lausanne »). Déjà porté par
+  `equipe.nom`.
+- Chaque entrée du carnet affiche **Prénom, Nom, Rôle (s'il y en a) et Cellule d'appartenance**.
+- Le carnet a **deux volets** : les **personas** (régis par AD-021 : internes visibles,
+  externes progressifs, champ libre) **+** les **participants / cellules** de l'instance
+  (annuaire complet, ci-dessus).
+
+**Cohérence avec AD-007.** Le nom libre d'une cellule est un **libellé d'instance** (identifier
+et afficher une vraie cellule) ; il **ne sert jamais au ciblage** des injects du scénario, qui
+passe toujours par le référentiel déclaré et l'association au lancement. Aucun retour au
+ciblage par texte libre.
+
+Relève de l'élargissement d'AD-030 (pas un élargissement distinct). Principalement une spec
+d'interface ; confirme que `equipe.nom` est un libellé libre au niveau instance.
