@@ -1019,3 +1019,66 @@ clic accidentel arrête un exercice à 300 cellules.
 > en situation de stress. Le message personnalisé (5.9.8) est **conservé**.
 
 Résout l'angle mort « arrêt d'urgence » (5.9). **Pas un élargissement.**
+
+## AD-035 — Invitations : deux types de liens (organisateur permanent vs participant temporaire)
+
+**Date.** 23/07/2026
+**Pourquoi.** Un organisateur (facilitateur, responsable) est un compte durable à créer une
+fois ; un participant est une identité éphémère liée à un seul exercice. Deux liens distincts.
+
+**Décision.**
+- **Règle de cascade** (PRD 5.8.6, confirmée) : un profil n'invite que vers un niveau **égal ou
+  inférieur**, à l'intérieur de **son propre périmètre**.
+- **Confiance déléguée à l'inviteur** (PRD 5.8.7, confirmée) : la plateforme **ne vérifie pas**
+  l'appartenance réelle de l'invité.
+- **Lien A — invitation d'un organisateur** (utilisateur plateforme : facilitateur, responsable) :
+  nominatif, **à usage unique**, **sans limite de durée**. L'invité **crée son mot de passe** et
+  devient un **compte enregistré**, membre des organisateurs de l'exercice.
+  → **Amende le PRD 5.8.8** (qui bornait l'invitation à 1 semaine) : **pas d'expiration** pour
+  les organisateurs.
+- **Lien B — accès participant** : nominatif, personnel, rattaché à **une seule instance**,
+  **sans compte ni mot de passe** ; réutilisable par la même personne sur plusieurs appareils
+  (PRD 5.6.5), **cesse à la clôture** de l'instance, **et expire à 1 semaine**.
+- **Renvoi en un clic** (nouveau lien, ancien invalidé) pour les deux (5.8.9 / 5.6.5).
+- Émissions et renvois **tracés** dans `admin_audit_log` (AD-002).
+
+**Note.** « Usage unique » = **personnel et nominatif** (un lien par personne), pas « une seule
+connexion » — un participant se reconnecte de plusieurs appareils.
+
+## AD-036 — Compteurs de facturation : agrégats par compte racine, survivant à la purge
+
+**Date.** 23/07/2026
+**Pourquoi.** Facturer au volume sans conserver de donnée personnelle, et sans que la purge
+efface l'assiette (PRD 8.1.5).
+
+**Décision.**
+- On compte **le nombre d'instances** et **le nombre de participants** (ceux qui ont rejoint).
+- **Agrégés par compte racine.** Un compteur participant s'incrémente **quand un participant
+  rejoint** ; le compteur d'instances au lancement.
+- **Visibles uniquement au sommet** : le responsable du compte racine (cabinet ou organisation
+  autonome) et l'éditeur — personne d'autre (RLS en 0009).
+- **Survivent à la purge** : table d'agrégats dédiée (`compte_racine_id`, période, nb_instances,
+  nb_participants), **hors** cascade de suppression.
+
+Débloque le volet facturation de la migration 0008.
+
+## AD-037 — Suppression / archivage du contenu : catalogue permanent, sur-mesure gérable
+
+**Date.** 23/07/2026
+**Pourquoi.** Le catalogue est un actif durable qui ne doit pas disparaître ; le sur-mesure est
+propre à un client et peut être rangé ou supprimé.
+
+**Décision.**
+- **Contenu catalogue** (portée **plateforme** ou **compte racine**, cf. AD-022) : **ni archivé
+  ni supprimé** — permanent une fois créé.
+- **Contenu sur-mesure** (portée **organisation** ou **filiale**) : **archivable ET supprimable**.
+  La suppression est **sans danger** car chaque instance a figé son **snapshot** (AD-003) :
+  supprimer le scénario source ne casse aucun exercice déjà joué.
+
+> ⚠️ **Divergence signalée avec le PRD 5.1.4**, qui rendait le contenu de portée plateforme
+> *archivable* (pour le retirer de la sélection) et *non supprimable*. Ici le catalogue n'est
+> **ni l'un ni l'autre**. **Conséquence** : un scénario catalogue obsolète **reste dans la liste
+> de sélection** (pas de retrait propre). À revisiter si le besoin de « retirer sans supprimer »
+> apparaît.
+
+Précise la migration 0004.
