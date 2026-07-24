@@ -757,3 +757,66 @@ autre organisation ne voit ce contenu, y compris au sein du portefeuille d'un m�
 **Cas d'usage couvert.** Organisation **autonome** → un catalogue privé se pose en portée
 **compte racine** ; organisation **cliente d'un cabinet** → en portée **organisation**. Dans les
 deux cas, toutes les filiales peuvent rejouer l'exercice.
+
+## AD-024 — Configuration de l'exercice : deux axes, choisie à l'instance
+
+**Date.** 23/07/2026
+**Pourquoi.** La forme d'un exercice ne commande pas que l'affichage : elle commande aussi le
+ciblage, la livraison et le débrief — c'est donc un réglage **stocké en base**, pas du pur
+frontend.
+
+**Décision.** Un exercice porte une **configuration explicite** à **deux axes indépendants** :
+
+| Axe | Valeurs |
+|---|---|
+| **Structure d'équipes** | liste à plat · une cellule · plusieurs cellules |
+| **Rôles** | avec rôles · sans rôles |
+
+- La configuration est **choisie au niveau de l'INSTANCE**, à la préparation ; **stockée en
+  base**, **figée dans le snapshot** au lancement (AD-003).
+- Les écrans (import, éditeur d'inject, débrief) **lisent** ce réglage pour afficher la bonne
+  interface. Le front **reflète** la config, il ne la porte pas (principe PRD 5.8.4).
+- **Conséquence assumée** : un scénario qui cible par rôle ou par équipe nommée, joué dans une
+  instance de structure différente (ex. à plat, sans rôles), produit des **cibles non
+  résolues**, traitées par **ARB-4** (avertissement bloquant au lancement, jamais bloquant en
+  cours d'exercice).
+- Le **scénario conserve son référentiel** (intention d'auteur, AD-007/ARB-5) ; l'instance le
+  **réalise ou l'aplatit** via l'étape d'association au lancement.
+
+**Rappel** : le caractère facultatif du rôle était déjà acté (ARB-5). AD-024 ajoute que
+« sans rôles / sans équipes » est un **réglage explicite d'exercice**, et non seulement une
+colonne laissée vide. Conforme au PRD (rôle « éventuel » 5.6.1, exercice à cellule unique
+ch. 6) — **pas un élargissement de périmètre**.
+
+## AD-025 — Exercice « liste à plat » = une cellule unique implicite masquée
+
+**Date.** 23/07/2026
+**Pourquoi.** Préserver un modèle unique de livraison, de ciblage et de débrief en évitant tout
+cas particulier « participant sans équipe ».
+
+**Décision.** Un exercice sans équipes est, **en base**, une instance à **une équipe par défaut**
+contenant tous les participants ; l'**interface masque** la notion d'équipe. Le lien
+participant → équipe **reste obligatoire**. Aucun cas « sans équipe » à gérer dans le ciblage,
+la réception ou le débrief. Passer plus tard d'un jeu à plat à un exercice à cellules ne casse
+rien.
+
+**Note.** Une variante « cellule décisionnelle + cellule opérationnelle » n'est qu'un exercice
+**à plusieurs cellules nommées** — aucun mécanisme spécial.
+
+## AD-026 — Comportement de ciblage à l'écran (spec d'interface au-dessus d'ARB-5)
+
+**Date.** 23/07/2026
+**Pourquoi.** Rendre le ciblage fluide quel que soit ce qu'on sait des participants, **sans
+changer le modèle de données** (les trois dimensions d'ARB-5 suffisent).
+
+**Décision (interface, sans impact sur le schéma).**
+1. **Rôle et personne sont liés** : sélectionner un **rôle** fait apparaître la ou les
+   **personnes** qui le portent ; sélectionner une **personne** montre son **rôle** (s'il en a).
+2. **Rôle porté par plusieurs personnes** (ex. 300 RSSI dans 300 cellules) : une case
+   **« Envoyer à l'ensemble »** + choix du rôle dans une liste → **tous les porteurs** du rôle
+   reçoivent l'inject.
+3. **Mode jeu (sans rôles)** : le ciblage se fait directement par **prénom + nom**.
+
+**Formulation à la préparation** *(spec d'écran)* : au démarrage d'un exercice, un choix de
+**structure** — « liste de personnes » / « une cellule » / « plusieurs cellules » — et un choix
+**rôles oui/non**, qui commandent l'affichage de l'import, de l'éditeur d'inject et du débrief.
