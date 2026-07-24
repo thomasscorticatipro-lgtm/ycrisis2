@@ -897,3 +897,32 @@ plutôt que d'éclater le contenu entre le scénario et l'instance.
 en statut **brouillon** (AD-012) et devra être validé avant un exercice réel.
 
 Conforme PRD 5.1.2-3 et 5.1.15. **Pas un élargissement.**
+
+## AD-030 — Messages entre participants : mail simulé et messagerie pro sont peer-to-peer
+
+**Date.** 23/07/2026
+**Pourquoi.** En vraie crise, les cellules s'écrivent directement ; limiter l'écriture des
+participants aux seuls personas appauvrirait la simulation.
+
+**Décision.** Un message **initié par un participant** (canal **mail simulé**, messagerie pro)
+peut cibler **un persona, un autre participant, ou une équipe (cellule)**.
+
+- **Rappel (AD-010)** : le « mail » est une **boîte simulée, entièrement dans la plateforme** ;
+  aucun email réel n'est envoyé. Canal « mail » simulé ≠ adresse email réelle.
+- **Livraison** :
+  - → **persona** : boîte de réception du facilitateur (PRD 5.2.11), ou IA si le persona lui
+    est délégué.
+  - → **participant** : déposé dans la **boîte de réception persistante** du destinataire
+    (PRD 5.4.15), même mécanique que les injects.
+  - → **équipe** : diffusé à **tous les membres** de l'équipe (fan-out), comme un inject ciblé.
+- Le **réseau social** reste à part : fil partagé public à l'échelle de l'instance (AD-020),
+  et non un envoi adressé.
+- Tout message est un **événement typé, horodaté, attribué** (AD-011, PRD 5.4.13) → matière de
+  débrief.
+
+**Conséquence schéma (ÉTAPE 2).** La boîte de réception (`reception`) doit pouvoir représenter
+un **expéditeur qui est soit un persona (fiche figée), soit un participant**. C'est le pendant,
+côté participants, de l'auteur qualifié d'AD-011.
+
+> ⚠️ **Élargissement de périmètre MVP assumé.** Le PRD 5.4.11 cadrait l'écriture du participant
+> sur les **personas** ; le flux **participant → participant / équipe** va au-delà.
