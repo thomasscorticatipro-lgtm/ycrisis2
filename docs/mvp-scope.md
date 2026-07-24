@@ -8,8 +8,11 @@ n'enregistre que les **écarts assumés**.
 ci-dessous, ne doit **pas** être développé en v1 — même si cela paraît utile.
 
 > 🔄 **Révisé le 23/07/2026** après lecture du PRD v0.3 **complet** (les ch. 1-3 et 5-9
-> n'avaient pas été déposés au moment de l'interview d'architecture). Cette lecture a montré
-> que **deux des trois « élargissements » n'en étaient pas** : le PRD les exigeait déjà.
+> n'avaient pas été déposés au moment de l'interview d'architecture). Cette lecture a d'abord
+> montré que **deux des trois « élargissements » initiaux n'en étaient pas** (le PRD les
+> exigeait déjà — voir « Reclassés » plus bas). Les points travaillés ensuite le 23/07 ont
+> ajouté de **vrais** élargissements. **Total actuel : trois élargissements assumés**, listés
+> ci-dessous.
 
 ---
 
