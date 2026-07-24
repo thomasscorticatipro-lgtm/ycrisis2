@@ -820,3 +820,34 @@ changer le modèle de données** (les trois dimensions d'ARB-5 suffisent).
 **Formulation à la préparation** *(spec d'écran)* : au démarrage d'un exercice, un choix de
 **structure** — « liste de personnes » / « une cellule » / « plusieurs cellules » — et un choix
 **rôles oui/non**, qui commandent l'affichage de l'import, de l'éditeur d'inject et du débrief.
+
+## AD-027 — Temps fictif : saut de temps sur l'inject, en position absolue depuis le début
+
+**Date.** 23/07/2026
+**Pourquoi.** Garder l'écriture simple (une palette de sauts) tout en donnant à chaque inject
+une date fictive **stable et directement comparable**, indépendante de l'ordre d'écriture.
+
+**Décision.**
+- Le temps fictif d'un inject est exprimé par un **saut de temps porté par l'inject**
+  (PRD 5.2.5), **optionnel** : la plupart des injects n'en portent pas → ils se passent au
+  **même moment fictif** que le fil (PRD 5.2.4).
+- **Position absolue depuis le début de l'exercice** (J+0 = départ), et non cumulative :
+  chaque inject porte sa distance au départ.
+- **Palette simple** : heures **et** jours (`+Xh`, `+Xj`), en choix rapides.
+- **Dérivation (AD-014)** : la position absolue **est** le repère normalisé triable ; le
+  libellé affiché au participant (« Nous sommes à J+2 ») en est déduit, tout comme le saut
+  annoncé (différence avec la position de l'inject précédent).
+- **Distinction maintenue** (ARB-1) : ceci décrit **la date que l'inject annonce**, pas le
+  moment réel où il part. Le déclenchement reste régi par AD-013 (horloge fictive / action du
+  facilitateur).
+
+**Règle de cohérence proposée.** La position fictive **ne peut pas reculer** le long du
+déroulé (monotonie non décroissante) ; deux injects **peuvent** partager le même moment
+fictif. Un réglage qui ferait revenir le temps fictif en arrière est refusé. *(À confirmer par
+Thomas : suppose qu'aucun « flashback » n'est voulu en v1.)*
+
+**Point de vigilance (AD-015).** Un saut à l'échelle du **jour** est un **bond instantané
+annoncé**, piloté naturellement **à la main** ; le moteur automatique à cadence fixe sert les
+cinétiques **continues intra-journée**. Les deux outils coexistent sans se gêner.
+
+Conforme au PRD 5.2.4-5 ; confirme ARB-1 ; raffine AD-014. **Pas un élargissement de périmètre.**
